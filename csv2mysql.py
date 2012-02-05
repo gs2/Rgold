@@ -14,8 +14,8 @@ except:
     print 'read csv error'
 for line in reader:
 #    print line
-    sql="insert into "+sys.argv[1]+" values(%s,%s,%s,%s,%s,%s)"
-    param=(line[0],line[1],line[2],line[3],line[4],line[5])
+    sql="insert into "+sys.argv[1]+" values(%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE Open=%s,High=%s,Low=%s,Close=%s,Volume=%s"
+    param=(line[0],line[2],line[3],line[4],line[5],line[6],line[2],line[3],line[4],line[5],line[6])
     try:
         cursor.execute(sql,param)
     except:
