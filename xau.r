@@ -2,7 +2,7 @@ library("quantmod")
 library("RMySQL")
 
 force=function(x) {
-  return((EMA(Cl(x),n=2)-EMA(lag(Cl(x),1),n=2))*Vo(x))
+  return((EMA(Cl(x),n=2)-EMA(Op(x),n=2))*Vo(x))
      }
 bull=function(x) {
   return(Hi(x)-EMA(Cl(x)))
@@ -13,19 +13,28 @@ bear=function(x) {
 wmr=function(x){
   return(1-WPR(HLC(x)))
   }
+myadx=function(x) {
+  return(ADX(HLC(x))[,c(1,2,4)])
+         }
+sco=function(x){
+  return(stoch(HLC(x),nFastK=5,nFastD=3,nSlowD=3)[,c(2,3)])
+  }
+
 addFI=newTA(force,col='blue',type='l')
 addBU=newTA(bull,legend.name="Bull",col='white',type='h')
 addBE=newTA(bear,legend.name="Bear",col='white',type='h')
 addWMR=newTA(wmr,legend.name="WMR",col='blue',type='l')
+addMYADX=newTA(myadx,col=c("green","red","blue"))
+addSCO=newTA(sco,col=c("blue","red"),type=c("l","l"),lty=c(1,2))
 con=dbConnect(MySQL(),user="john",password="",dbname="john",host="localhost")
-tmp=dbGetQuery(con,'select * from xauw where Date>"2009-10-01" and Date<"2012-08-01 order by Date"')
+tmp=dbGetQuery(con,'select * from xagw where Date>"2008-01-01" and Date<"2012-04-01 order by Date"')
 dbDisconnect(con)
 XAUW=xts(tmp[,-1],as.Date(tmp[,1],"%Y-%m-%d"))
-
+#XAUW[,c(1,2,3,4)]=XAUW[,c(1,2,3,4)]*6.3027/31.1035*1000
 #par(mfrow=c(2,1))
-#getSymbols("AAPL")
+#XAUW=getSymbols("^SSEC",src="yahoo",auto.assign=FALSE)
 #getSymbols("xauw",src="MySQL",db.fields=c("Date","Open","High","Low","Close","Volume"),user="john",password="",dbname="john")
-chartSeries(XAUW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,col="green"),addSAR()))
+chartSeries(XAUW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,col="green"),addSAR(),addMYADX(),addMACD(),addFI(),addSCO(),addBU(),addBE()))
 #addTA(Vo(XAUW)*(EMA(Cl(XAUW),n=2)-EMA(lag(Cl(XAUW),1),n=2))/10000,col='blue', type='l')
 #addTA(Hi(XAUW)-EMA(Cl(XAUW),n=13),col='white',legend="Bull",type='h')
 #addTA(Lo(XAUW)-EMA(Cl(XAUW),n=13),col='white',legend="Bear",type='h')
@@ -33,13 +42,11 @@ chartSeries(XAUW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,
 #addRSI()
 #addTA(1-WPR(HLC(XAUW)),col='blue',type='l')
 
-addTA(ADX(HLC(XAUW))[,c(1,2,4)],col=c("green","red","blue"))
-addMACD()
-addTA(force(XAUW)/100000000,col='blue',type='l')#,yrange=c(-3,3))
-addWMR()
-#addTA(cbind(stoch(HLC(XAUW),nFastK=5,nFastD=3,nSlowD=3)[,2],SMA(stoch(HLC(XAUW),nFastK=5,nFastD=3,nSlowD=3)[,2],n=3)),col=c("blue","red"),type=c("l","l"),lty=c(1,2))
-addTA(stoch(HLC(XAUW),nFastK=5,nFastD=3,nSlowD=3)[,c(2,3)],col=c("blue","red"),type=c("l","l"),lty=c(1,2))
-#addTA(SMA(stoch(HLC(XAUW),nFastK=14,nFastD=3,nSlowD=3)[,2],n=3),n=-5,col="red",type="l",lty=2)
-addBU()
-addBE()
-
+#addTA(ADX(HLC(XAUW))[,c(1,2,4)],col=c("green","red","blue"))
+#addMYADX()
+#addMACD()
+#addTA(force(XAUW)/100000000,col='blue',type='l')#,yrange=c(-3,3))
+#addWMR()
+#addTA(stoch(HLC(XAUW),nFastK=5,nFastD=3,nSlowD=3)[,c(2,3)],col=c("blue","red"),type=c("l","l"),lty=c(1,2))
+#addBU()
+#addBE()
