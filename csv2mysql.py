@@ -14,6 +14,8 @@ except:
     print 'read csv error'
 for line in reader:
 #    print line
+    if (sys.argv[1]=='xagm' and line[6]<4000):
+        continue
     sql="insert into "+sys.argv[1]+" values(%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE Open=%s,High=%s,Low=%s,Close=%s,Volume=%s"
     param=(line[0],line[2],line[3],line[4],line[5],line[6],line[2],line[3],line[4],line[5],line[6])
     try:
