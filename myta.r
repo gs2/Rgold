@@ -1,20 +1,20 @@
-force=function(x) {
-  return((EMA(Cl(x),n=2)-EMA(Op(x),n=2))*Vo(x))
+force=function(x,m) {
+  return((EMA(Cl(x),n=m)-EMA(Op(x),n=m))*Vo(x))
      }
-bull=function(x) {
-  return(Hi(x)-EMA(Cl(x)))
+bull=function(x,m) {
+  return(Hi(x)-EMA(Cl(x),n=m))
   }
-bear=function(x) {
-  return(Lo(x)-EMA(Cl(x)))
+bear=function(x,m) {
+  return(Lo(x)-EMA(Cl(x),n=m))
   }
-wmr=function(x){
-  return(1-WPR(HLC(x)))
+wmr=function(x,m){
+  return(1-WPR(HLC(x),n=m))
   }
-myadx=function(x) {
-  return(ADX(HLC(x))[,c(1,2,4)])
+myadx=function(x,m) {
+  return(ADX(HLC(x),n=m)[,c(1,2,4)])
          }
-sco=function(x){
-  return(stoch(HLC(x),nFastK=5,nFastD=3,nSlowD=3)[,c(2,3)])
+sco=function(x,FK,FD,SD){
+  return(stoch(HLC(x),nFastK=FK,nFastD=FD,nSlowD=SD)[,c(2,3)])
   }
 
 addFI=newTA(force,legend.name="Force",col='blue',type='l')
