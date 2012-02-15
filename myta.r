@@ -1,5 +1,5 @@
 force=function(x,m=2) {
-  return((EMA(Cl(x),n=m)-EMA(Op(x),n=m))*Vo(x))
+  return((EMA(Cl(x),n=m)-EMA(Op(x),n=m))*log10(Vo(x)))
      }
 bull=function(x,m=13) {
   return(Hi(x)-EMA(Cl(x),n=m))

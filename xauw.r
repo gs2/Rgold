@@ -8,7 +8,7 @@ tmp=dbGetQuery(con,'select * from xauw where Date>"2007-04-01" and Date<"2012-03
 dbDisconnect(con)
 XAUW=xts(tmp[,-1],as.Date(tmp[,1],"%Y-%m-%d"))
 #XAUW[,c(1,2,3,4)]=XAUW[,c(1,2,3,4)]*6.3027/31.1035*1000
-#par(mfrow=c(2,1))
+#op=par(mfrow=c(2,1))
 #XAUW=getSymbols("^SSEC",src="yahoo",auto.assign=FALSE)
 #getSymbols("xauw",src="MySQL",db.fields=c("Date","Open","High","Low","Close","Volume"),user="john",password="",dbname="john")
 #chartSeries(XAUW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,col="green"),addSAR(),addMYADX(),addMACD(),addFI(),addSCO(),addBU(),addBE()))
@@ -30,3 +30,5 @@ chartSeries(XAUW,TA=c(addVo(),addEMA(n=13,col="red"),addSAR(),addMYADX(m=14),add
 #addTA(stoch(HLC(XAUW),nFastK=5,nFastD=3,nSlowD=3)[,c(2,3)],col=c("blue","red"),type=c("l","l"),lty=c(1,2))
 #addBU()
 #addBE()
+addTA(xts(TRUE,as.Date("2011-08-14")),on=-(1:7),col="#333333")
+#par(op)

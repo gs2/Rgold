@@ -28,3 +28,4 @@ chartSeries(XAGM,TA=c(addVo(),addEMA(n=13,col="red"),addSAR(),addMYADX(m=5),addM
 #addTA(stoch(HLC(XAUW),nFastK=5,nFastD=3,nSlowD=3)[,c(2,3)],col=c("blue","red"),type=c("l","l"),lty=c(1,2))
 #addBU()
 #addBE()
+#addTA(xts(TRUE,as.Date("2011-08-21")),on=-(1:7),col="#333333")
