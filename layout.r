@@ -4,28 +4,42 @@ require("RMySQL")
 source("~/source/Rgold/myta.r")
 
 con=dbConnect(MySQL(),user="john",password="",dbname="john",host="localhost")
-tmp=dbGetQuery(con,'select * from xauw where Date>"2010-04-01" and Date<"2012-03-01 order by Date"')
-tmq=dbGetQuery(con,'select * from xagw where Date>"2010-04-01" and Date<"2012-03-01 order by Date"')
+tmp1=dbGetQuery(con,'select * from xaum where Date>"2007-04-16" and Date<"2012-03-01 order by Date"')
+tmp2=dbGetQuery(con,'select * from xagm where Date>"2007-04-16" and Date<"2012-03-01 order by Date"')
+tmp3=dbGetQuery(con,'select * from xauw where Date>"2010-10-01" and Date<"2012-03-01 order by Date"')
+tmp4=dbGetQuery(con,'select * from xagw where Date>"2010-10-01" and Date<"2012-03-01 order by Date"')
+tmp5=dbGetQuery(con,'select * from xaud where Date>"2011-11-01" and Date<"2012-03-01 order by Date"')
+tmp6=dbGetQuery(con,'select * from xagd where Date>"2011-11-01" and Date<"2012-03-01 order by Date"')
 dbDisconnect(con)
-XAUW=xts(tmp[,-1],as.Date(tmp[,1],"%Y-%m-%d"))
-XAGW=xts(tmq[,-1],as.Date(tmq[,1],"%Y-%m-%d"))
+XAUM=xts(tmp1[,-1],as.Date(tmp1[,1],"%Y-%m-%d"))
+XAGM=xts(tmp2[,-1],as.Date(tmp2[,1],"%Y-%m-%d"))
+XAUW=xts(tmp3[,-1],as.Date(tmp3[,1],"%Y-%m-%d"))
+XAGW=xts(tmp4[,-1],as.Date(tmp4[,1],"%Y-%m-%d"))
+XAUD=xts(tmp5[,-1],as.Date(tmp5[,1],"%Y-%m-%d"))
+XAGD=xts(tmp6[,-1],as.Date(tmp6[,1],"%Y-%m-%d"))
 #XAUW[,c(1,2,3,4)]=XAUW[,c(1,2,3,4)]*6.3027/31.1035*1000
 #par(mfrow=c(2,1))
 #XAUW=getSymbols("^SSEC",src="yahoo",auto.assign=FALSE)
 #getSymbols("xauw",src="MySQL",db.fields=c("Date","Open","High","Low","Close","Volume"),user="john",password="",dbname="john")
 #chartSeries(XAUW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,col="green"),addSAR(),addMYADX(),addMACD(),addFI(),addSCO(),addBU(),addBE()))
 #chartSeries(XAUW,TA=c(addVo(),addEMA(n=13,col="red"),addSAR(),addMYADX(m=14),addMACD(),addFI(m=2)))
-layout( matrix( c(
-    1, 2,
-    3, 4
-   ), nc=1, byrow=TRUE),
-  heights = rep( c(3,1), 2 )
+layout( matrix( c(1:30), nc=3, byrow=FALSE),
+  heights = rep( c(4,1,1,1,2), 6 )
 )
-#layout.show(8) # To check that the order is as desired
+#layout.show(16) # To check that the order is as desired
 #for(i in 1:2) {
-chartSeries(XAUW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,col="green"),addSAR()),layout=NULL)
-chartSeries(XAGW,TA=c(addVo(),addBBands(),addEMA(n=22,col="yellow"),addEMA(n=11,col="green"),addSAR()),layout=NULL)
-#}
+chartSeries(XAUM,TA=c(addVo(),addEMA(n=13,col="red"),addMYADX(m=5),addMACD(fast=3,slow=5,signal=5),addRSI()),layout=NULL)
+#addTA(xts(TRUE,as.Date("2011-08-14")),on=-(1:4),col="#333333")
+chartSeries(XAGM,TA=c(addVo(),addEMA(n=13,col="red"),addMYADX(m=5),addMACD(fast=3,slow=5,signal=5),addRSI()),layout=NULL)
+#addTA(xts(TRUE,as.Date("2011-08-14")),on=-(5:8),col="#333333")
+chartSeries(XAUW,TA=c(addVo(),addEMA(n=13,col="red"),addMYADX(m=13),addMACD(),addFI()),layout=NULL)
+#addTA(xts(TRUE,as.Date("2011-08-14")),on=-(1:4),col="#333333")
+chartSeries(XAGW,TA=c(addVo(),addEMA(n=13,col="red"),addMYADX(m=13),addMACD(),addFI()),layout=NULL)
+#addTA(xts(TRUE,as.Date("2011-08-14")),on=-(5:8),col="#333333")
+chartSeries(XAUD,TA=c(addVo(),addEMA(n=13,col="red"),addMYADX(m=13),addMACD(),addSCO()),layout=NULL)
+#addTA(xts(TRUE,as.Date("2011-08-14")),on=-(1:4),col="#333333")
+chartSeries(XAGD,TA=c(addVo(),addEMA(n=13,col="red"),addMYADX(m=13),addMACD(),addSCO()),layout=NULL)
+#addTA(xts(TRUE,as.Date("2011-08-14")),on=-(5:8),col="#333333")
 
 #addTA(EMA(Vo(XAUW)*(Cl(XAUW)-Op(XAUW)),n=5),col='blue', type='l')
 #addTA(Hi(XAUW)-EMA(Cl(XAUW),n=13),col='white',legend="Bull",type='h')
